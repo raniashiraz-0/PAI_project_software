@@ -1,0 +1,6 @@
+numpy
+opencv-python
+PyYAML
+Pillow
+faster-whisper
+av>=15,<17

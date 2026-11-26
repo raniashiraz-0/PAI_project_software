@@ -1,0 +1,105 @@
+{
+ "offsets": {},
+ "last_seen": {},
+ "missions": [
+  {
+   "time": "2026-11-24 22:18:03",
+   "medicine": "Paracetamol 500mg",
+   "success": false,
+   "duration_s": 0.0,
+   "error": "Arm home failed: Arm move failed: ESP32 refused: PCA9685 servo driver not responding (check servo battery / I2C wires)",
+   "replans": 0,
+   "grip_attempts": 0,
+   "found_slot": null,
+   "visual_servo": null
+  },
+  {
+   "time": "2026-11-24 22:31:05",
+   "medicine": "Paracetamol 500mg",
+   "success": false,
+   "duration_s": 0.0,
+   "error": "Arm home failed: Arm move failed: ESP32 refused: PCA9685 servo driver not responding (check servo battery / I2C wires)",
+   "replans": 0,
+   "grip_attempts": 0,
+   "found_slot": null,
+   "visual_servo": null
+  },
+  {
+   "time": "2026-11-25 20:14:32",
+   "medicine": "Paracetamol 500mg",
+   "success": false,
+   "duration_s": 0.0,
+   "error": "Arm home failed: Arm move failed: ESP32 refused: arm controller (ESP32) is disconnected",
+   "replans": 0,
+   "grip_attempts": 0,
+   "found_slot": null,
+   "visual_servo": null
+  },
+  {
+   "time": "2026-11-25 20:20:51",
+   "medicine": "Paracetamol 500mg",
+   "success": false,
+   "duration_s": 0.0,
+   "error": "Arm home failed: Arm move failed: ESP32 refused: PCA9685 servo driver not responding (check servo battery / I2C wires)",
+   "replans": 0,
+   "grip_attempts": 0,
+   "found_slot": null,
+   "visual_servo": null
+  },
+  {
+   "time": "2026-11-25 20:53:48",
+   "medicine": "Cetirizine 10mg",
+   "success": false,
+   "duration_s": 0.0,
+   "error": "Arm home failed: Arm move failed: ESP32 refused: PCA9685 servo driver not responding (check servo battery / I2C wires)",
+   "replans": 0,
+   "grip_attempts": 0,
+   "found_slot": null,
+   "visual_servo": null
+  },
+  {
+   "time": "2026-11-25 21:48:54",
+   "medicine": "Paracetamol 500mg",
+   "success": false,
+   "duration_s": 0.0,
+   "error": "Arm home failed: Arm move failed: ESP32 refused: busy (still moving)",
+   "replans": 0,
+   "grip_attempts": 0,
+   "found_slot": null,
+   "visual_servo": null
+  },
+  {
+   "time": "2026-11-25 21:56:50",
+   "medicine": "Paracetamol 500mg",
+   "success": false,
+   "duration_s": 6.3,
+   "error": "The phone camera cannot see the car at the start",
+   "replans": 0,
+   "grip_attempts": 0,
+   "found_slot": null,
+   "visual_servo": null
+  },
+  {
+   "time": "2026-11-25 22:19:48",
+   "medicine": "Paracetamol 500mg",
+   "success": false,
+   "duration_s": 5.0,
+   "error": "The phone camera cannot see the car at the start",
+   "replans": 0,
+   "grip_attempts": 0,
+   "found_slot": null,
+   "visual_servo": null
+  },
+  {
+   "time": "2026-11-25 22:20:38",
+   "medicine": "Paracetamol 500mg",
+   "success": false,
+   "duration_s": 2.1,
+   "error": "The phone camera cannot see the car at the start",
+   "replans": 0,
+   "grip_attempts": 0,
+   "found_slot": null,
+   "visual_servo": null
+  }
+ ]
+}

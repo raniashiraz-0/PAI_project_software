@@ -1,0 +1,203 @@
+# =============================================================================
+#  Pharma Rover Configuration
+#  Set for the REAL robot: every part is real (box recognition uses the ESP32-CAM + box tags 21/22/23, or YOLO once trained).
+#  To try everything as a pretend robot again, set all *_sim back to true.
+#  Check what is working: dashboard -> Live Robot & Teach -> Run self-test.
+# =============================================================================
+system:
+  name: "Pharma Rover Server"
+  version: "3.0.0"
+  description: "Unified web server, mission orchestrator, vision, arm motion and display controller"
+  subsystems:
+    car_sim: false          # false = real base on the main ESP32 (TCP 5000)
+    arm_sim: false          # false = real arm on the main ESP32 (TCP 5001)
+    tracker_sim: false      # false = phone camera + ArUco markers
+    verifier_sim: false    # false = ESP32-CAM pictures + YOLO / ArUco / barcode
+    display_sim: false      # false = real TFT on the Uno (through the ESP32)
+    audio_sim: false        # false = Whisper on the laptop
+
+server:
+  host: "0.0.0.0"
+  port: 8000
+  log_level: "INFO"
+  cors_allowed_origins: ["*"]
+
+# The server broadcasts on UDP 4210 so the ESP32 + ESP32-CAM are found without typing IPs
+discovery:
+  enabled: true
+  udp_port: 4210
+
+devices:
+  controller_esp32:
+    # ONE ESP32 runs the base motors, 4 ultrasonic sensors, both PCA9685 arm drivers
+    # (SDA 21 / SCL 22) and the TFT relay.
+    # "auto" = found automatically. If that fails, put its IP here (it is printed in
+    # the ESP32 Serial Monitor and shown at the bottom-left of the TFT).
+    host: "auto"
+    fallback_ip: "pharmarover.local"   # used if auto-discovery finds nothing (mDNS name of the main ESP32)
+    car_tcp_port: 5000
+    arm_tcp_port: 5001
+    display_relay_port: 8080
+    drive_vel_watchdog_ms: 500
+  display_uno:
+    # "relay"  = on the robot: server -> Wi-Fi -> ESP32 -> GPIO17 wire -> Uno D0 (recommended)
+    #            Nothing on the laptop touches this link (Arduino IDE can be closed).
+    # "serial" = bench test: Uno plugged into the laptop by USB (COM4). Close the
+    #            Arduino IDE Serial Monitor first - only one program can use COM4.
+    mode: "relay"
+    serial_port: "COM4"
+    baud_rate: 115200
+    ping_interval_s: 2.0
+    card_timeout_s: 20.0
+    hardware: "3.5 inch TFT ILI9486 480x320 8-bit parallel (MAR3501)"
+  power_subsystem:
+    base_battery:   "2S Li-ion 7.4 V -> L298N + 4 gear motors; 5 V buck -> ESP32, HC-SR04 x4"
+    arm_battery_1:  "2S 7.4 V -> XL4015 5 V -> PCA9685 #1 (0x40) V+ : 3x MG995"
+    arm_battery_2:  "2S 7.4 V -> buck 5 V 3 A -> PCA9685 #2 (0x41) V+ : 2x MG90 + SG90"
+    camera_battery: "1S 3.7 V -> 5 V boost converter -> ESP32-CAM 5V pin"
+  cameras:
+    overhead_phone:
+      # "sim" or the phone's live stream URL, e.g. IP Webcam app: "http://192.168.43.20:8080/video"
+      source: "http://192.168.18.11:8080/video"   # Android IP Webcam - if the phone IP changes, run: python tools/phone_camera_setup.py
+      resolution: [1280, 720]
+      fps_limit: 15
+      latency_est_s: 0.25
+    laptop_webcam:
+      enabled: false
+      source: 0
+      fps_limit: 10
+    hand_esp32_cam:
+      source: "HTTP_POST"                         # the ESP32-CAM uploads to the endpoint below
+      http_post_endpoint: "/api/vision/hand_frame"
+      resolution: [640, 480]
+      fps_limit: 10
+      latency_est_s: 0.30
+
+markers:
+  dictionary: "DICT_4X4_50"
+  ids:
+    car: 5
+    floor_ref_0: 0
+    floor_ref_1: 1
+    floor_ref_2: 2
+    floor_ref_3: 3
+    start_location: 6
+    shelf_s1: 10
+    box_paracetamol: 21
+    box_cetirizine: 22
+    box_omeprazole: 23
+
+robot:
+  start_pose_mm: [700.0, 700.0, 0.0] # x, y, heading from the floor-map origin
+  wheel_base_mm: 150.0
+  hard_clearance_mm: 165.0           # robot radius + margin (A* keeps this far from obstacles)
+  soft_clearance_mm: 300.0
+  v_max_mm_s: 250.0
+  w_max_rad_s: 1.2
+  v_dock_cruise_mm_s: 100.0
+  dock_standoff_mm: 200.0
+  dock_tolerance_mm: 10.0
+  dock_tolerance_deg: 2.0
+  stale_pose_timeout_s: 1.0          # phone stream should give >= 3 fps
+  stationary_window_s: 0.5
+  manual_step_dist_mm: 200.0         # "move forward"
+  manual_step_turn_deg: 90.0         # "turn right" / "move right"
+  voice_continuous_dist_mm: 2000.0   # "keep moving forward" (say "stop" to stop)
+
+navigation:
+  carry_speed_mm_s: 160.0            # slower while holding a box
+  car_half_length_mm: 110.0          # centre of the car -> front/back sensor
+  car_half_width_mm: 90.0            # centre of the car -> left/right sensor
+  front_avoid_cm: 25.0               # server stops + re-plans when the front sensor is closer than this
+  side_avoid_cm: 12.0                # side sensors mark obstacles; re-plan if the route goes through them
+  obstacle_size_mm: 200.0            # size of an obstacle put on the map per detection
+  obstacle_memory_s: 90.0            # forget detected obstacles after this long
+  max_replans: 12
+  front_stop_mm: 150                 # the ESP32 itself stops below this (backup safety)
+  back_stop_mm: 120
+  dock_front_stop_mm: 50             # reduced while docking (the shelf is in front of the sensor)
+  pose_lost_wait_s: 2.0              # wait this long for the camera to see the car again
+
+arm:
+  L1_mm: 120.8
+  L2_mm: 90.0
+  L3_mm: 100.0
+  shoulder_height_mm: 162.0
+  home_q_deg: [0.0, 110.0, -145.0, 60.0]
+  pre_grasp_distance_mm: 40.0
+  lift_height_mm: 20.0
+  approach_step_mm: 5.0
+  max_payload_g: 50.0
+  max_hold_time_high_load_s: 3.0
+  grab_auth_timeout_s: 10.0
+  max_simultaneous_servos: 2         # enforced by the ESP32 firmware
+  speed_limits_deg_s:
+    shoulder: 30.0
+    elbow: 40.0
+    yaw: 50.0
+    wrist_pitch: 45.0
+    wrist_roll: 60.0
+    gripper: 60.0
+
+vision:
+  # Which medicine box is which:
+  #   "auto" = YOLO if the model file exists, otherwise ArUco marker + barcode on the box
+  #   "yolo" / "aruco"
+  detector: "auto"
+  yolo_model_path: "data/yolo/medicine_boxes.pt"   # class names: paracetamol, cetirizine, omeprazole
+  yolo_conf: 0.5
+  scan_look_distance_mm: 250.0       # used to aim the arm at each of the 3 slots
+  scan_retries_per_slot: 1
+  hand_led_duty: 60                  # ESP32-CAM flash brightness while scanning (0-255)
+  quality_gate:
+    min_laplacian_variance: 50.0     # Blur threshold
+    min_brightness: 40.0             # Brightness mean
+    max_brightness: 230.0            # Glare / saturation limit
+    min_box_pixels: 4000
+  match_policy: "SAFE_STRICT"        # Requires ArUco + (barcode or OCR) when YOLO is off
+  ocr_fallback_enabled: true
+  multi_frame_votes_needed: 3
+  barcode_checksum_strict: true
+
+# Does the gripper REALLY hold the box? (checked after lifting, and again before delivery)
+#   1. grip sensor on the ESP32 (GPIO14, see firmware config.h) - if fitted, it decides
+#   2. otherwise the ESP32-CAM: YOLO / box tag still in view, or the picture still looks
+#      like the one taken at the box (an empty gripper sees the room instead)
+grip_check:
+  retries: 1                   # how many extra grab attempts if the claws come up empty
+  when_unsure: "continue"      # camera can't tell: "continue" or "retry"
+  yolo_min_area_frac: 0.15     # a held box fills at least 15% of the picture
+  similarity_held: 0.55        # picture similarity above this = box still there
+  similarity_empty: 0.30       # below this = gripper is empty
+
+# What the server learns from experience (saved in data/learned/)
+learning:
+  enabled: true
+  drive_model: true            # regression: learns the real speed / turn / drift of the car from the camera
+  camera_latency_s: 0.25       # Kalman filter: how old a phone-camera picture is when it arrives
+  camera_noise_mm: 6.0
+  grasp_learning_rate: 0.35    # how fast per-slot grasp corrections are learned
+
+# Before grabbing, the gripper camera lines the claws up with the box
+visual_servo:
+  enabled: true
+  max_iterations: 3
+  tolerance: 0.04              # box centre within 4% of the picture = aligned
+  gain: 0.8
+  aim_point: [0.5, 0.5]        # where an aligned box appears in the picture (tune if the camera is off-centre)
+  camera_to_box_mm: 100        # distance camera -> box at the pre-grasp pose
+  camera_hfov_deg: 66          # OV2640 field of view
+  camera_vfov_deg: 50
+  flip_x: false                # set true if the camera is mounted upside down / mirrored
+  flip_y: false
+
+audio:
+  wake_word: "rover"
+  wake_word_enabled: false
+  stt_backend: "faster-whisper"      # Whisper runs locally on the laptop
+  whisper_model: "base.en"           # "tiny.en" = faster, "base.en" = understands more
+  whisper_device: "cpu"
+  whisper_compute_type: "int8"
+  tts_backend: "web_speech"          # Browser speech output; use "pyttsx3" for server-local audio
+  fuzzy_threshold: 80
+  push_to_talk: true

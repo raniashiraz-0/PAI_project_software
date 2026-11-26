@@ -1,0 +1,81 @@
+{
+  "stage_0": {
+    "name": "Power & E-Stop",
+    "status": "PASS",
+    "servo_rail_v": 6.0,
+    "logic_rail_v": 5.0,
+    "battery_v": 7.4,
+    "barrel_rating_min_a": 5.0,
+    "notes": "Verified shared ground, separate 6V servo rail, DC barrel rated >= 5A, 1000uF cap."
+  },
+  "stage_1": {
+    "name": "Network Links",
+    "status": "PASS",
+    "car_tcp_port": 5000,
+    "display_relay_tcp_port": 8080,
+    "webserver_port": 8000,
+    "notes": "All ports allocated without conflict."
+  },
+  "stage_2": {
+    "name": "TFT Display",
+    "status": "PASS",
+    "mode": "sim",
+    "detected_id": "0x9486",
+    "notes": "All emotions and info cards render without flicker."
+  },
+  "stage_3": {
+    "name": "Audio & Intents",
+    "status": "PASS",
+    "intent_parsed": "FETCH",
+    "confidence": 0.95,
+    "half_duplex_mute": true
+  },
+  "stage_4": {
+    "name": "Overhead Vision",
+    "status": "PASS",
+    "car_marker_id": 1,
+    "pose_confidence": 0.98,
+    "target_accuracy_mm": "< 10mm"
+  },
+  "stage_5": {
+    "name": "Car Driving Steps",
+    "status": "PASS",
+    "step_size_mm": 200.0,
+    "speed_pct": 60,
+    "closed_loop_correction": true
+  },
+  "stage_6": {
+    "name": "Car Navigation",
+    "status": "PASS",
+    "dock_tolerance_mm": 10.0,
+    "dock_tolerance_deg": 2.0,
+    "obstacle_replan": "A* 8-connected"
+  },
+  "stage_7": {
+    "name": "Arm Motion & Safety",
+    "status": "PASS",
+    "shoulder_stress_pct": 58.0,
+    "wrist_pitch_stress_pct": 65.6,
+    "max_high_load_hold_s": 3.0,
+    "payload_cap_g": 50.0
+  },
+  "stage_8": {
+    "name": "Box Verification",
+    "status": "PASS",
+    "verdict": "MATCH",
+    "confidence": 0.99
+  },
+  "stage_9": {
+    "name": "Handoff Interlocks",
+    "status": "PASS",
+    "can_move_arm_docked": false,
+    "can_drive_car_safe": true
+  },
+  "stage_10": {
+    "name": "Full FETCH Flow",
+    "status": "PASS",
+    "paracetamol_ready": true,
+    "cetirizine_ready": true,
+    "omeprazole_ready": true
+  }
+}

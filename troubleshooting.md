@@ -1,0 +1,14 @@
+# Pharma Rover: Troubleshooting & Root Cause Analysis Guide
+
+| Symptom | Likely Cause | Diagnostic Test | Solution / Permanent Fix |
+|---|---|---|---|
+| **ESP32-CAM resets or drops frames** | Brown-out from WiFi transmission peak current spikes (~310 mA) | Check 5V rail voltage with oscilloscope/multimeter during WiFi TX burst | Solder a **470 &mu;F electrolytic capacitor** directly across 5V and GND pins at the ESP32-CAM module. |
+| **Uno TFT Display shows White Screen** | Shield controller ID not recognized by MCUFRIEND_kbv | Check Serial monitor output on boot for `ID: 0x...` | Force ID in sketch: `if (ID == 0xD3D3) ID = 0x9486;` or set `#define ROTATION 1`. |
+| **Uno TFT shows `NO LINK`** | Heartbeat `PING` timeout (>10s) or loose D0/D1 connection | Run `python -c "import serial; s=serial.Serial('COM5', 115200); s.write(b'PING\n')"` | Verify ESP32 TX connects to Uno D0 (RX). Check that shared ground is secure. |
+| **Arduino Uno upload fails with avrdude timeout** | Wire connected to Uno D0 (RX) interferes with USB UART upload | Disconnect wire from D0; retry upload | **Always unplug the ESP32 wire from Uno D0 while uploading sketches** over USB. |
+| **Car drifts or turns by wrong angle** | Differential wheel slip or calibration discrepancy between left/right motors | Run Stage 5 bring-up test: `drive_forward(200mm)` and measure ending heading | Overhead ArUco tracker closed loop automatically corrects drift. Calibrate wheel radius in `config.yaml`. |
+| **Tracker reports `CAMERA_MOVED`** | High mount phone bumped; floor reference markers (0..3) shifted > 15 mm | Run `doctor.py` to inspect floor reference marker residuals | Re-tape floor markers flat. Re-run floor calibration or re-seat phone mount. |
+| **Arm Shoulder (MG995) jitters or droops** | Servo overloaded (needs 6.47 kg.cm vs 5.5 kg.cm continuous limit) | Run `python server/torque_report.py` to inspect torque utilization | 1. Limit high-load pose hold time to < 3.0 s.<br>2. Hard cap payload at 50g.<br>3. Install a counterbalance spring or upgrade to 20 kg.cm class DS3218. |
+| **Arm Wrist Pitch (SG90) stalls / buzzes** | 1.48 kg.cm load exceeds 1.1 kg.cm continuous limit of micro servo | Inspect if ESP32-CAM is mounted too far forward on the gripper | Shift ESP32-CAM mount 15 mm backward toward wrist axis. Replace SG90 with metal-gear MG92B. |
+| **Arm refuses to close gripper (`ERR_NOT_AUTHORISED`)** | Grab gate closed: server did not send `GRAB_OK(mission_id, medicine_id)` | Check web dashboard Hand Camera Verdict badge | Verify that ArUco marker is visible and EAN-13 barcode checksum is valid. Click operator override button if necessary. |
+| **Speech recognition misses medicine name** | Background ambient noise or microphone gain distortion | Check `last_spoken` / transcription box in web dashboard | Use the typed command box or click the one-click Fetch buttons on the web dashboard. |

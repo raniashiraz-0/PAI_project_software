@@ -1,0 +1,24 @@
+# devices.yaml - overview of the Pharma Rover devices (the server reads server/config.yaml)
+network:
+  wifi: "2.4 GHz phone hotspot or router - same SSID/password in both firmware config.h files"
+  discovery: "server broadcasts 'PRSRV 8000' on UDP 4210; ESP32s answer 'PRDEV <name>'"
+
+devices:
+  laptop_server:
+    http_port: 8000
+    description: "Python server: Whisper voice, YOLO/ArUco box check, phone-camera tracking, A*, dashboard"
+  main_esp32:
+    firmware: "firmware/src/esp32_main  (PlatformIO env esp32_main, COM3)"
+    tcp_ports: {base: 5000, arm: 5001, tft_relay: 8080}
+    i2c: {sda: 21, scl: 22, pca9685: ["0x40 MG995 x3", "0x41 MG90 x2 + SG90"]}
+    description: "4 DC motors (L298N), 4x HC-SR04, arm (max 2 servos moving at once), Serial2 -> Uno D0"
+    motor_pins: {ENA: 2, IN1: 4, IN2: 5, IN3: 18, IN4: 19, ENB: 25}      # ENB moved from 21 (21 = SDA)
+    ultrasonic: {front: [13, 34], back: [27, 35], left: [23, 33], right: [26, 36]}   # [TRIG, ECHO]
+  esp32_cam:
+    firmware: "firmware/src/esp32_cam  (PlatformIO env esp32_cam)"
+    description: "Gripper camera, uploads JPEG frames to POST /api/vision/hand_frame"
+  uno_tft:
+    firmware: "arduino/uno_tft_display/uno_tft_display.ino  (Arduino IDE, COM4)"
+    description: "3.5in ILI9486 MAR3501 shield, faces + medicine cards, receives text lines on D0 at 115200"
+  overhead_phone:
+    description: "IP Webcam stream, mounted straight down; floor tags 0-3, car tag 5, start tag 6, shelf tag 10"

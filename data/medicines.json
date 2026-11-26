@@ -1,0 +1,241 @@
+{
+  "shelves": [
+    {
+      "id": "S1",
+      "marker_id": 10,
+      "levels_mm": {
+        "1": 140
+      },
+      "note": "pose is measured by the phone camera at run time"
+    }
+  ],
+  "medicines": [
+    {
+      "id": 1,
+      "name": "Paracetamol 500mg",
+      "category": "Painkiller",
+      "ean13": "8961000000112",
+      "aruco_id": 21,
+      "weight_g": 45,
+      "shelf_id": "S1",
+      "slot_u_mm": 100,
+      "dock_pose_shelf_frame_mm": [
+        -200.0,
+        100
+      ],
+      "front_depth_mm": 15,
+      "centre_height_mm": 150,
+      "size_mm": [
+        100,
+        50,
+        20
+      ],
+      "position_tolerance_mm": 15,
+      "last_seen": null,
+      "grasp_point_arm_frame_mm": [
+        250.0,
+        0.0,
+        -12.1
+      ],
+      "distance_from_arm_base_mm": 250.3,
+      "distance_from_home_tip_mm": 172.1,
+      "joint_angles_deg": {
+        "pre_grasp": [
+          0.0,
+          39.28,
+          -118.72,
+          79.44
+        ],
+        "grasp": [
+          0.0,
+          32.16,
+          -90.13,
+          57.97
+        ],
+        "lift": [
+          0.0,
+          47.33,
+          -88.14,
+          40.81
+        ]
+      },
+      "servo_angles_deg": {
+        "pre_grasp": {
+          "yaw": 90.0,
+          "shoulder": 39.3,
+          "elbow": 61.3,
+          "wrist_pitch": 169.4,
+          "wrist_roll": 90.0
+        },
+        "grasp": {
+          "yaw": 90.0,
+          "shoulder": 32.2,
+          "elbow": 89.9,
+          "wrist_pitch": 148.0,
+          "wrist_roll": 90.0
+        },
+        "lift": {
+          "yaw": 90.0,
+          "shoulder": 47.3,
+          "elbow": 91.9,
+          "wrist_pitch": 130.8,
+          "wrist_roll": 90.0
+        }
+      },
+      "note": "Preset = where the medicine is expected. The hand camera measures the real position (Part 2C).",
+      "yolo_class": "paracetamol",
+      "grasp_phi_deg": -0.0,
+      "taught_at": "2026-11-25 22:00:52"
+    },
+    {
+      "id": 2,
+      "name": "Cetirizine 10mg",
+      "category": "Antihistamine",
+      "ean13": "8961000000228",
+      "aruco_id": 22,
+      "weight_g": 40,
+      "shelf_id": "S1",
+      "slot_u_mm": 0,
+      "dock_pose_shelf_frame_mm": [
+        -200.0,
+        0
+      ],
+      "front_depth_mm": 25,
+      "centre_height_mm": 150,
+      "size_mm": [
+        100,
+        50,
+        20
+      ],
+      "position_tolerance_mm": 15,
+      "last_seen": null,
+      "grasp_point_arm_frame_mm": [
+        260.0,
+        0.0,
+        -12.0
+      ],
+      "distance_from_arm_base_mm": 260.3,
+      "distance_from_home_tip_mm": 179.6,
+      "joint_angles_deg": {
+        "pre_grasp": [
+          0.0,
+          38.07,
+          -112.01,
+          73.94
+        ],
+        "grasp": [
+          0.0,
+          29.45,
+          -81.93,
+          52.49
+        ],
+        "lift": [
+          0.0,
+          43.6,
+          -79.92,
+          36.32
+        ]
+      },
+      "servo_angles_deg": {
+        "pre_grasp": {
+          "yaw": 90.0,
+          "shoulder": 38.1,
+          "elbow": 68.0,
+          "wrist_pitch": 163.9,
+          "wrist_roll": 90.0
+        },
+        "grasp": {
+          "yaw": 90.0,
+          "shoulder": 29.4,
+          "elbow": 98.1,
+          "wrist_pitch": 142.5,
+          "wrist_roll": 90.0
+        },
+        "lift": {
+          "yaw": 90.0,
+          "shoulder": 43.6,
+          "elbow": 100.1,
+          "wrist_pitch": 126.3,
+          "wrist_roll": 90.0
+        }
+      },
+      "note": "Preset = where the medicine is expected. The hand camera measures the real position (Part 2C).",
+      "yolo_class": "cetirizine"
+    },
+    {
+      "id": 3,
+      "name": "Omeprazole 20mg",
+      "category": "Antacid",
+      "ean13": "8961000000334",
+      "aruco_id": 23,
+      "weight_g": 48,
+      "shelf_id": "S1",
+      "slot_u_mm": -100,
+      "dock_pose_shelf_frame_mm": [
+        -200.0,
+        -100
+      ],
+      "front_depth_mm": 10,
+      "centre_height_mm": 150,
+      "size_mm": [
+        100,
+        50,
+        20
+      ],
+      "position_tolerance_mm": 15,
+      "last_seen": null,
+      "grasp_point_arm_frame_mm": [
+        245.0,
+        0.0,
+        -12.0
+      ],
+      "distance_from_arm_base_mm": 245.3,
+      "distance_from_home_tip_mm": 168.4,
+      "joint_angles_deg": {
+        "pre_grasp": [
+          0.0,
+          39.71,
+          -122.0,
+          82.29
+        ],
+        "grasp": [
+          0.0,
+          33.37,
+          -94.02,
+          60.65
+        ],
+        "lift": [
+          0.0,
+          49.09,
+          -92.02,
+          42.93
+        ]
+      },
+      "servo_angles_deg": {
+        "pre_grasp": {
+          "yaw": 90.0,
+          "shoulder": 39.7,
+          "elbow": 58.0,
+          "wrist_pitch": 172.3,
+          "wrist_roll": 90.0
+        },
+        "grasp": {
+          "yaw": 90.0,
+          "shoulder": 33.4,
+          "elbow": 86.0,
+          "wrist_pitch": 150.6,
+          "wrist_roll": 90.0
+        },
+        "lift": {
+          "yaw": 90.0,
+          "shoulder": 49.1,
+          "elbow": 88.0,
+          "wrist_pitch": 132.9,
+          "wrist_roll": 90.0
+        }
+      },
+      "note": "Preset = where the medicine is expected. The hand camera measures the real position (Part 2C).",
+      "yolo_class": "omeprazole"
+    }
+  ]
+}
